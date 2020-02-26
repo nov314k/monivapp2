@@ -1,0 +1,21 @@
+DROP DATABASE IF EXISTS `monivapp2`;
+CREATE DATABASE IF NOT EXISTS `monivapp2`;
+USE `monivapp2`;
+
+SET FOREIGN_KEY_CHECKS=0;
+
+DROP TABLE IF EXISTS `movie`;
+
+SET FOREIGN_KEY_CHECKS=1;
+CREATE TABLE `movie` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `title` varchar(128) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+
+INSERT INTO `movie` VALUES 
+	(1,'The Matrix'),
+	(2,'The Matrix Reloaded'),
+	(3,'The Matrix Revolutions');
+	
+SET FOREIGN_KEY_CHECKS=1;
