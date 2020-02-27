@@ -2,15 +2,15 @@ package com.monivapp2.entity;
 
 import java.util.List;
 
-public class EmbeddedMovies {
+public class EmbeddedResponse {
 	
 	private List<Movie> movies;
 
-	public EmbeddedMovies() {
+	public EmbeddedResponse() {
 
 	}
 	
-	public EmbeddedMovies(List<Movie> movies) {
+	public EmbeddedResponse(List<Movie> movies) {
 		this.movies = movies;
 	}
 

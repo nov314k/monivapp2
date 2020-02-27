@@ -2,21 +2,21 @@ package com.monivapp2.entity;
 
 public class Response {
 
-	private EmbeddedMovies _embedded;
+	private EmbeddedResponse _embedded;
 	
 	public Response() {
 
 	}
 	
-	public Response(EmbeddedMovies _embedded) {
+	public Response(EmbeddedResponse _embedded) {
 		this._embedded = _embedded;
 	}
 
-	public EmbeddedMovies get_embedded() {
+	public EmbeddedResponse get_embedded() {
 		return _embedded;
 	}
 
-	public void set_embedded(EmbeddedMovies _embedded) {
+	public void set_embedded(EmbeddedResponse _embedded) {
 		this._embedded = _embedded;
 	}	
 }
