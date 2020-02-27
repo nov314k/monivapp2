@@ -7,29 +7,31 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.monivapp2.client.MovieRestClient;
 import com.monivapp2.entity.Movie;
+import com.monivapp2.rest.client.MovieRestClient;
 
 @Controller
-public class MovieController {
+@RequestMapping("/client")
+public class MovieClientController {
 
 	@Autowired
 	private MovieRestClient movieRestClient;
 	
 	@GetMapping("/list")
-	public String getMovies(Model theModel) {
+	public String showListPage(Model theModel) {
 
-		List<Movie> movies = movieRestClient.getMovies();
+		List<Movie> movies = movieRestClient.getAllMovies();
 		theModel.addAttribute("movies", movies);
-		return "movies";
+		return "client/listPage";
 	}
 	
 	@GetMapping("/list/{movieId}")
-	public String getMovie(Model theModel, @PathVariable int movieId) {
+	public String showOneMoviePage(Model theModel, @PathVariable int movieId) {
 
 		Movie theMovie = movieRestClient.getMovie(movieId);
 		theModel.addAttribute("theMovie", theMovie);
-		return "movie";
+		return "client/oneMoviePage";
 	}
 }

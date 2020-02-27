@@ -1,4 +1,4 @@
-package com.monivapp2.client;
+package com.monivapp2.rest.client;
 
 import java.util.List;
 
@@ -21,7 +21,7 @@ public class MovieRestClientImpl implements MovieRestClient {
 	}
 	
 	@Override
-	public List<Movie> getMovies() {
+	public List<Movie> getAllMovies() {
 		
 		Response theResponse = restTemplate.getForObject(REST_API_URL, Response.class);
 		return theResponse.get_embedded().getMovies();

@@ -1,4 +1,4 @@
-package com.monivapp2.dao;
+package com.monivapp2.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
