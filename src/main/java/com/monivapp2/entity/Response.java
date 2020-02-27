@@ -1,22 +1,23 @@
 package com.monivapp2.entity;
 
+// TODO Change this to an inner class?
 public class Response {
 
-	private EmbeddedResponse _embedded;
+	private ResponseEmbedded _embedded;
 	
 	public Response() {
 
 	}
 	
-	public Response(EmbeddedResponse _embedded) {
+	public Response(ResponseEmbedded _embedded) {
 		this._embedded = _embedded;
 	}
 
-	public EmbeddedResponse get_embedded() {
+	public ResponseEmbedded get_embedded() {
 		return _embedded;
 	}
 
-	public void set_embedded(EmbeddedResponse _embedded) {
+	public void set_embedded(ResponseEmbedded _embedded) {
 		this._embedded = _embedded;
 	}	
 }
