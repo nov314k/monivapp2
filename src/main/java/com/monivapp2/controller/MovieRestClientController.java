@@ -14,7 +14,7 @@ import com.monivapp2.rest.client.MovieRestClient;
 
 @Controller
 @RequestMapping("/client")
-public class MovieClientController {
+public class MovieRestClientController {
 
 	@Autowired
 	private MovieRestClient movieRestClient;
