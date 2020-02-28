@@ -38,7 +38,7 @@ public class VoteRestController {
 			value = "/rest/movies/action/vote",
 			consumes = "application/json",
 			produces = "application/json")
-	public Vote restMoviesVotePost(@RequestBody Vote theVote) {
+	public Vote restMoviesActionVotePost(@RequestBody Vote theVote) {
 		
 		return voteService.addVote(theVote);
 	}

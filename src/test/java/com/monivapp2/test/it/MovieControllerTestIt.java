@@ -35,19 +35,27 @@ public class MovieControllerTestIt {
 	@Autowired
 	private TestRestTemplate restGetTemplate;
 	
-	static private String voteUrl;
+	static private String restMoviesPost_MovieControllerUrl_addAMovie;
+	static private String restMoviesActionVotePost_VoteControllerUrl_voteForAMovie;
 	static private RestTemplate restTemplate;
 	static private HttpHeaders httpHeaders;
 	static private JSONObject voteJsonObject;
+	static private JSONObject movieJsonObject;
 	
 	@BeforeClass
 	public static void runBeforeAllTestMethods() throws JSONException {
 		
-		voteUrl = "http://localhost:8080/rest/movies/action/vote";
+		restMoviesPost_MovieControllerUrl_addAMovie =
+				"http://localhost:8080/rest/movies";
+		restMoviesActionVotePost_VoteControllerUrl_voteForAMovie =
+				"http://localhost:8080/rest/movies/action/vote";
+			
 		restTemplate = new RestTemplate();
 		httpHeaders = new HttpHeaders();
 		httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+		
 		voteJsonObject = new JSONObject();
+		movieJsonObject = new JSONObject();
 	}
 
 	@Test
@@ -58,7 +66,8 @@ public class MovieControllerTestIt {
 	
 	@Test
 	@Order(2)
-	public void areMoviesCorrectlyPreloaded() throws JSONException {
+	public void areMoviesCorrectlyPreloaded_restMoviesGet_MovieController()
+			throws JSONException {
 		
 		String response = this.restGetTemplate
 				.getForObject("/rest/movies", String.class);
@@ -72,7 +81,8 @@ public class MovieControllerTestIt {
 	
 	@Test
 	@Order(3)
-	public void areVotesCorrectlyPreloaded() throws JSONException {
+	public void areVotesCorrectlyPreloaded_restVotesGet_VoteController()
+			throws JSONException {
 		
 		String response = this.restGetTemplate
 				.getForObject("/rest/votes", String.class);
@@ -86,19 +96,44 @@ public class MovieControllerTestIt {
 	
 	@Test
 	@Order(4)
-	public void isCorrectJsonReturnedAfterVoting_ViaVotingRest_ViaGet()
-			throws JSONException {
+	public void isCorrectJsonReturnedAfterAddingAMovie_restMoviesPost_MovieController()
+			throws JSONException, JsonMappingException, JsonProcessingException {
 		
-		String response = this.restGetTemplate
-				.getForObject("/rest/movies/vote/2", String.class);
+		movieJsonObject.put("title", "Movie Under Test");
+		final ObjectMapper objectMapper = new ObjectMapper();
 		
-		JSONAssert.assertEquals("{id:2,title:\"The Matrix Reloaded\",votes:2},",
-				response, false);
+		HttpEntity<String> request = 
+			      new HttpEntity<String>(movieJsonObject.toString(), httpHeaders);
+		
+		String movieResultAsJsonStr = restTemplate
+				.postForObject(restMoviesPost_MovieControllerUrl_addAMovie,
+						request, String.class);
+
+		JsonNode root = objectMapper.readTree(movieResultAsJsonStr);
+		
+		assertNotNull(movieResultAsJsonStr);
+	    assertNotNull(root);
+	    assertNotNull("Movie Under Test", root.path("title").asText());
+	    assertNotNull("0", root.path("votes").asText());
+	    // TODO Test id=4 (since I'm testing it elsewhere)?
+		
 	}
 	
 	@Test
 	@Order(5)
-	public void isCorrectJsonReturnedAfterVoting_ViaVotingRest_ViaPost()
+	public void isCorrectJsonReturnedAfterVotingForAMovie_restMoviesVoteGet_MovieController()
+			throws JSONException {
+		
+		String response = this.restGetTemplate
+				.getForObject("/rest/movies/vote/4", String.class);
+		
+		JSONAssert.assertEquals("{id:4,title:\"Movie Under Test\",votes:1},", response,
+				false);
+	}
+	
+	@Test
+	@Order(6)
+	public void isCorrectJsonReturnedAfterJustAddoingARandomVote_restMoviesActionVotePost_VoteController()
 			throws JSONException, JsonMappingException, JsonProcessingException {
 		
 		voteJsonObject.put("movieid", "77");
@@ -108,12 +143,70 @@ public class MovieControllerTestIt {
 			      new HttpEntity<String>(voteJsonObject.toString(), httpHeaders);
 		
 		String voteResultAsJsonStr = restTemplate
-				.postForObject(voteUrl, request, String.class);
+				.postForObject(restMoviesActionVotePost_VoteControllerUrl_voteForAMovie,
+						request, String.class);
 
 		JsonNode root = objectMapper.readTree(voteResultAsJsonStr);
 		
 		assertNotNull(voteResultAsJsonStr);
 	    assertNotNull(root);
 	    assertNotNull("77", root.path("movieid").asText());
+	    // TODO Test id=5 (since I'm testing it elsewhere)?
+	}
+	
+	@Test
+	@Order(7)
+	public void isCorrectJsonReturnedAfterJustAddingARandomVote_restMoviesActionVoteGet_VoteController()
+			throws JSONException {
+		
+		String response = this.restGetTemplate
+				.getForObject("/rest/movies/action/vote/88", String.class);
+		
+		JSONAssert.assertEquals("{id:6,movieid:88}", response, false);
+	}
+	
+	@Test
+	@Order(8)
+	public void isCorrectCountOfVotesIntegerReturned_restLimits_VoteController()
+			throws JSONException {
+		
+		String response = this.restGetTemplate
+				.getForObject("/rest/limits", String.class);
+		
+		JSONAssert.assertEquals("6", response.toString(), false);
+	}
+	
+	@Test
+	@Order(9)
+	public void isFinalMovieTableCorrect_restMovies_MovieController()
+			throws JSONException {
+		
+		String response = this.restGetTemplate
+				.getForObject("/rest/movies", String.class);
+		
+		JSONAssert.assertEquals("["
+				+ "{id:1,title:\"The Matrix\",votes:2},"
+				+ "{id:2,title:\"The Matrix Reloaded\",votes:1},"
+				+ "{id:4,title:\"Movie Under Test\",votes:1},"
+				+ "{id:3,title:\"The Matrix Revolutions\",votes:0}"
+				+ "]", response, false);
+	}
+	
+	@Test
+	@Order(10)
+	public void isFinalVoteTableCorrect_restVotes_VoteController()
+			throws JSONException {
+		
+		String response = this.restGetTemplate
+				.getForObject("/rest/votes", String.class);
+		
+		JSONAssert.assertEquals("["
+				+ "{id:1,movieid:1},"
+				+ "{id:2,movieid:2},"
+				+ "{id:3,movieid:3},"
+				+ "{id:4,movieid:4},"
+				+ "{id:5,movieid:77},"
+				+ "{id:6,movieid:88}"
+				+ "]", response, false);
 	}
 }
