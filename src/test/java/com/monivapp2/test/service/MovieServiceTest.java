@@ -29,9 +29,9 @@ public class MovieServiceTest {
 	public void getAllMovies() {
 		
 		when(movieRepository.findAll()).thenReturn(Arrays.asList(
-				new Movie(1,"The Matrix"),
-				new Movie(2,"The Matrix Reloaded"),
-				new Movie(3,"The Matrix Revolutions")));
+				new Movie(1,"The Matrix", 0),
+				new Movie(2,"The Matrix Reloaded", 0),
+				new Movie(3,"The Matrix Revolutions", 0)));
 
 		List<Movie> items = movieService.getAllMovies();
 		
