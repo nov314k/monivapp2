@@ -5,6 +5,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.Arrays;
+import java.util.logging.Logger;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,6 +15,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -31,6 +33,8 @@ public class VoteRestControllerTest {
 	@MockBean
 	private VoteService voteService;
 	
+	Logger logger = Logger.getGlobal();
+	
 	@Test
 	public void restMoviesGet() throws Exception {
 		
@@ -40,16 +44,16 @@ public class VoteRestControllerTest {
 						new Vote(3, 3)));
 		
 		String expected = "["
-				+ "{id:1,movie_id:1},"
-				+ "{id:2,movie_id:2},"
-				+ "{id:3,movie_id:3}"
+				+ "{id:1,movieid:1},"
+				+ "{id:2,movieid:2},"
+				+ "{id:3,movieid:3}"
 				+ "]";
 		
 		RequestBuilder request = MockMvcRequestBuilders
 				.get("/rest/votes")
 				.accept(MediaType.APPLICATION_JSON);
 		
-		mockMvc.perform(request)
+		MvcResult result = mockMvc.perform(request)
 				.andExpect(status().isOk())
 				.andExpect(content().json(expected))
 				.andReturn();
@@ -58,7 +62,7 @@ public class VoteRestControllerTest {
 	@Test
 	public void restMoviesActionVotePost() throws Exception {
 		
-		String voteToAdd = "{\"id\":1,\"movie_id\":3}";
+		String voteToAdd = "{\"id\":1,\"movieid\":3}";
 		
 		RequestBuilder request = MockMvcRequestBuilders
 				.post("/rest/movies/action/vote")
@@ -66,9 +70,11 @@ public class VoteRestControllerTest {
 				.content(voteToAdd)
 				.contentType(MediaType.APPLICATION_JSON);
 		
-	    mockMvc.perform(request)
+		MvcResult result = mockMvc.perform(request)
 	    		.andExpect(status().isOk())
 	    		.andReturn();
+	    
+	    logger.info(result.getResponse().getContentAsString());
 	}
 	
 	@Test
@@ -78,9 +84,11 @@ public class VoteRestControllerTest {
 				.get("/rest/movies/action/vote/2")
 				.accept(MediaType.APPLICATION_JSON);
 		
-		mockMvc.perform(request)
+		MvcResult result = mockMvc.perform(request)
 				.andExpect(status().isOk())
 				.andReturn();
+		
+	    logger.info(result.getResponse().getContentAsString());
 	}
 	
 	@Test
@@ -90,8 +98,10 @@ public class VoteRestControllerTest {
 				.get("/rest/limits")
 				.accept(MediaType.APPLICATION_JSON);
 		
-		mockMvc.perform(request)
+		MvcResult result = mockMvc.perform(request)
 				.andExpect(status().isOk())
 				.andReturn();
+		
+	    logger.info(result.getResponse().getContentAsString());
 	}
 }

@@ -44,9 +44,9 @@ public class MovieRestControllerTest {
 	public void restMoviesGet() throws Exception {
 		
 		when(movieService.getAllMoviesOrderByVotesDesc()).thenReturn(Arrays.asList(
-						new Movie(1,"The Matrix", 2),
-						new Movie(2,"The Matrix Reloaded", 1),
-						new Movie(3,"The Matrix Revolutions", 0)));
+						new Movie(1, "The Matrix", 2),
+						new Movie(2, "The Matrix Reloaded", 1),
+						new Movie(3, "The Matrix Revolutions", 0)));
 		
 		String expected = "["
 				+ "{id:1,title:\"The Matrix\",votes:2},"
@@ -67,7 +67,7 @@ public class MovieRestControllerTest {
 	@Test
 	public void restMoviesPost() throws Exception {
 		
-		String expected = "{\"title\":\"Movie to Add\"}";
+		String expected = "{\"title\":\"Movie to Add\",\"votes\":0}";
 		
 		RequestBuilder request = MockMvcRequestBuilders
 				.post("/rest/movies")
