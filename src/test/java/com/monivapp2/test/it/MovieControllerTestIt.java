@@ -22,9 +22,9 @@ public class MovieControllerTestIt {
 		
 		String response = this.restTemplate.getForObject("/rest/movies",  String.class);
 		JSONAssert.assertEquals("["
-				+ "{id:1,title:\"The Matrix\"},"
-				+ "{id:2,title:\"The Matrix Reloaded\"},"
-				+ "{id:3,title:\"The Matrix Revolutions\"}"
+				+ "{id:1,title:\"The Matrix\",votes:2},"
+				+ "{id:2,title:\"The Matrix Reloaded\",votes:1},"
+				+ "{id:3,title:\"The Matrix Revolutions\",votes:0}"
 				+ "]", response, false);
 	}
 }
