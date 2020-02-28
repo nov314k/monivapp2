@@ -19,17 +19,22 @@ public class Movie {
 	@Column(name="title")
 	private String title;
 	
+	@Column(name="votes")
+	private int votes = 0;
+		
 	public Movie() {
 		
 	}
 
-	public Movie(String title) {
-		this.title = title;
-	}
-
-	public Movie(int id, String title) {
+	public Movie(int id, String title, int votes) {
 		this.id = id;
 		this.title = title;
+		this.votes = votes;
+	}
+
+	public Movie(String title, int votes) {
+		this.title = title;
+		this.votes = votes;
 	}
 
 	public int getId() {
@@ -47,4 +52,12 @@ public class Movie {
 	public void setTitle(String title) {
 		this.title = title;
 	}
+
+	public int getVotes() {
+		return votes;
+	}
+
+	public void setVotes(int votes) {
+		this.votes = votes;
+	}	
 }
