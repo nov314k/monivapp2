@@ -15,10 +15,22 @@ import com.monivapp2.service.MovieService;
 public class MovieRestController {
 	
 	@Autowired
-	private MovieService movieService;
+	public MovieService movieService;
 	
-	@GetMapping("/rest/movies")
+	@GetMapping(
+			value = "/rest/movies",
+			produces = "application/json")
 	List<Movie> restMovies() {
+		
 		return movieService.getAllMovies();
+	}
+	
+	@PostMapping(
+			value = "/rest/movie",
+			consumes = "application/json",
+			produces = "application/json")
+	public Movie restMovie(@RequestBody Movie theMovie) {
+		
+		return movieService.addMovie(theMovie);
 	}
 }
