@@ -4,22 +4,29 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.util.Arrays;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Logger;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import com.monivapp2.entity.Movie;
 import com.monivapp2.rest.MovieRestController;
 import com.monivapp2.service.MovieService;
+
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(MovieRestController.class)
@@ -30,6 +37,8 @@ public class MovieRestControllerTest {
 	
 	@MockBean
 	private MovieService movieService;
+	
+	Logger logger = Logger.getGlobal();
 	
 	@Test
 	public void restMoviesGet() throws Exception {
@@ -58,17 +67,19 @@ public class MovieRestControllerTest {
 	@Test
 	public void restMoviesPost() throws Exception {
 		
-		String movieToAdd = "{\"title\":\"Movie to Add\"}, votes:0";
+		String expected = "{\"title\":\"Movie to Add\"}";
 		
 		RequestBuilder request = MockMvcRequestBuilders
 				.post("/rest/movies")
 				.accept(MediaType.APPLICATION_JSON)
-				.content(movieToAdd)
+				.content(expected)
 				.contentType(MediaType.APPLICATION_JSON);
 		
-	    mockMvc.perform(request)
+	    MvcResult result = mockMvc.perform(request)
 	    		.andExpect(status().isOk())
 	    		.andReturn();
+	    
+	    logger.info(result.getResponse().getContentAsString());
 	}
 	
 	@Test
@@ -78,8 +89,10 @@ public class MovieRestControllerTest {
 				.get("/rest/movies/vote/2")
 				.accept(MediaType.APPLICATION_JSON);
 		
-		mockMvc.perform(request)
+		MvcResult result = mockMvc.perform(request)
 				.andExpect(status().isOk())
 				.andReturn();
+
+		logger.info(result.getResponse().getContentAsString());
 	}
 }
