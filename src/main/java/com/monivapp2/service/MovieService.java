@@ -18,4 +18,9 @@ public class MovieService {
 		
 		return movieRepository.findAll();
 	}
+
+	public Movie addMovie(Movie theMovie) {
+
+		return movieRepository.save(theMovie);
+	}
 }
