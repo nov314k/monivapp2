@@ -16,8 +16,8 @@ public class Vote {
 	@Column(name="id")
 	private int id;
 	
-	@Column(name="movie_id")
-	private int movie_id;
+	@Column(name="movieId")
+	private int movieId;
 	
 	public Vote() {
 		
@@ -25,11 +25,11 @@ public class Vote {
 
 	public Vote(int id, int movie_id) {
 		this.id = id;
-		this.movie_id = movie_id;
+		this.movieId = movie_id;
 	}
 
 	public Vote(int movie_id) {
-		this.movie_id = movie_id;
+		this.movieId = movie_id;
 	}
 
 	public int getId() {
@@ -41,10 +41,10 @@ public class Vote {
 	}
 
 	public int getMovie_id() {
-		return movie_id;
+		return movieId;
 	}
 
 	public void setMovie_id(int movie_id) {
-		this.movie_id = movie_id;
+		this.movieId = movie_id;
 	}
 }
